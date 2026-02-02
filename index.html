@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FurniSwift - Coimbatore Crafted</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- Navigation - Dark theme like reference -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🛋️</span>
+                <div class="logo-text">
+                    <h1>FurniSwift</h1>
+                    <span class="logo-tagline">COIMBATORE CRAFTED</span>
+                </div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="javascript:void(0)" class="nav-link active" data-section="home"><span class="nav-icon">🏠</span> HOME</a></li>
+                <li><a href="javascript:void(0)" class="nav-link" data-section="products"><span class="nav-icon">🛒</span> MARKET</a></li>
+                <li><a href="javascript:void(0)" class="nav-link" data-section="design-ai"><span class="nav-icon">✨</span> DESIGN AI</a></li>
+                <li><a href="javascript:void(0)" class="nav-link" data-section="orders"><span class="nav-icon">🕐</span> ORDERS</a></li>
+                <li class="nav-cart">
+                    <a href="javascript:void(0)" class="nav-link" data-section="cart">
+                        <span class="nav-icon">🛒</span>
+                        <span id="cartCount" class="cart-badge">0</span>
+                    </a>
+                </li>
+                <li id="profileNavItem" style="display:none;"><a href="javascript:void(0)" class="nav-link" data-section="profile">👤 PROFILE</a></li>
+                <li id="establishBtnWrap">
+                    <button type="button" class="btn-establish" id="establishBtn" onclick="showEstablishIdentity(); return false;">ESTABLISH IDENTITY</button>
+                </li>
+                <li id="logoutNavItem" style="display:none;"><a href="javascript:void(0)" class="nav-link" onclick="logout(); return false;">LOGOUT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Section - Hero with big background image -->
+    <section id="home" class="section active section-home">
+        <div class="hero-wrapper">
+            <div class="hero-bg" role="img" aria-label="Modern living room furniture"></div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-line"></span>
+                    <span>2026 DESIGNER SERIES</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="hero-title-white">Artisan</span>
+                    <span class="hero-title-gradient">Spaces.</span>
+                </h1>
+                <p class="hero-subtitle">Future-Proof Comfort. Coimbatore Crafted.</p>
+                <p class="hero-motto">REDEFINING INDIAN INTERIORS</p>
+                <div class="hero-buttons">
+                    <button type="button" class="btn-showroom" onclick="showSection('products'); return false;">ENTER SHOWROOM</button>
+                    <button type="button" class="btn-design-studio" onclick="showSection('design-ai'); return false;">✨ DESIGN STUDIO</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Establish Identity Modal (Login / Register) -->
+    <div id="establishModal" class="modal establish-modal">
+        <div class="modal-content establish-content">
+            <span class="close" onclick="closeEstablishModal(); return false;" role="button" tabindex="0">&times;</span>
+            <div class="establish-tabs">
+                <button type="button" class="tab-btn active" data-tab="login">Login</button>
+                <button type="button" class="tab-btn" data-tab="register">Register</button>
+            </div>
+            <!-- Login Form -->
+            <div id="loginTab" class="tab-panel active">
+                <h2>Login</h2>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-button">Login</button>
+                </form>
+            </div>
+            <!-- Register Form -->
+            <div id="registerTab" class="tab-panel">
+                <h2>Create Account</h2>
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea id="regAddress" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Profile Photo</label>
+                        <input type="file" id="regPhoto" accept="image/*" onchange="previewPhoto(event)">
+                        <div id="photoPreview" class="photo-preview"></div>
+                    </div>
+                    <button type="submit" class="auth-button">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market / Shopping Section -->
+    <section id="products" class="section">
+        <div class="page-container market-page">
+            <div class="market-header">
+                <div class="market-title-wrap">
+                    <h1 class="page-title-gradient">Market.</h1>
+                    <p class="page-subtitle">50 ARTISAN SYNCS AVAILABLE</p>
+                </div>
+                <div class="market-search-wrap">
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search collection..." onkeyup="filterProducts()">
+                    </div>
+                </div>
+            </div>
+            <div class="market-options">
+                <div class="filter-pills">
+                    <button type="button" class="pill active" data-filter="all">ALL</button>
+                    <button type="button" class="pill" data-filter="sofa">SOFAS</button>
+                    <button type="button" class="pill" data-filter="chair">CHAIRS</button>
+                    <button type="button" class="pill" data-filter="table">TABLES</button>
+                    <button type="button" class="pill" data-filter="bed">BEDS</button>
+                    <button type="button" class="pill" data-filter="cabinet">CABINETS</button>
+                    <button type="button" class="pill" data-filter="lighting">LIGHTING</button>
+                </div>
+                <div class="sort-wrap">
+                    <label for="sortSelect">Sort:</label>
+                    <select id="sortSelect" onchange="sortProducts(); displayProducts();">
+                        <option value="name-asc">Name A–Z</option>
+                        <option value="name-desc">Name Z–A</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+            <div id="productsGrid" class="products-grid products-grid-large"></div>
+            <div id="paginationWrap" class="pagination-wrap"></div>
+            <div id="recommendations" class="recommendations-section" style="display:none;">
+                <h3 class="section-title-gradient">✨ Recommended for You</h3>
+                <div id="recommendationsGrid" class="products-grid products-grid-large"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Design AI Section -->
+    <section id="design-ai" class="section">
+        <div class="page-container">
+            <h1 class="page-title-gradient">Design AI.</h1>
+            <p class="page-subtitle">3D PREVIEW & AI RECOMMENDATIONS</p>
+            <div class="design-ai-content">
+                <div class="ai-card">
+                    <div class="ai-card-icon">👁️</div>
+                    <h3>3D Preview</h3>
+                    <p>Visualize furniture in your space before buying</p>
+                    <button type="button" class="btn-primary-gradient" onclick="showSection('products'); return false;">Browse & Preview</button>
+                </div>
+                <div class="ai-card">
+                    <div class="ai-card-icon">🤖</div>
+                    <h3>AI Recommendations</h3>
+                    <p>Smart suggestions based on your preferences</p>
+                    <button type="button" class="btn-primary-gradient" onclick="showSection('products'); setTimeout(function(){ displayRecommendations(); }, 300); return false;">Get Recommendations</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Orders / History Section -->
+    <section id="orders" class="section">
+        <div class="page-container">
+            <h1 class="page-title-gradient">Orders.</h1>
+            <p class="page-subtitle">YOUR ORDER HISTORY</p>
+            <div id="ordersList" class="orders-list"></div>
+        </div>
+    </section>
+
+    <!-- Cart Section -->
+    <section id="cart" class="section">
+        <div class="page-container cart-page">
+            <h1 class="page-title-gradient">Cart.</h1>
+            <p class="page-subtitle">YOUR SHOPPING BAG</p>
+            <div id="cartItems" class="cart-items"></div>
+            <div id="cartSummary" class="cart-summary">
+                <div class="summary-row"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
+                <div class="summary-row"><span>Shipping:</span><span id="shipping">$50.00</span></div>
+                <div class="summary-row total"><span>Total:</span><span id="total">$50.00</span></div>
+                <button type="button" class="checkout-button" onclick="checkout(); return false;">Proceed to Checkout</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- User / Profile Section -->
+    <section id="profile" class="section">
+        <div class="page-container profile-page">
+            <h1 class="page-title-gradient">Profile.</h1>
+            <p class="page-subtitle">YOUR ACCOUNT</p>
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-photo-container">
+                        <img id="profilePhoto" src="" alt="Profile" class="profile-photo">
+                        <button type="button" onclick="document.getElementById('photoUpload').click()" class="photo-upload-btn">Change Photo</button>
+                        <input type="file" id="photoUpload" accept="image/*" style="display:none;" onchange="updateProfilePhoto(event)">
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="profileName"></h2>
+                        <p id="profileEmail"></p>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <h3>Personal Details</h3>
+                    <form id="profileForm" onsubmit="updateProfile(event)">
+                        <div class="form-group"><label>Full Name</label><input type="text" id="profileNameInput" required></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="profileEmailInput" required></div>
+                        <div class="form-group"><label>Phone</label><input type="tel" id="profilePhoneInput" required></div>
+                        <div class="form-group"><label>Address</label><textarea id="profileAddressInput" required></textarea></div>
+                        <button type="submit" class="auth-button">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content product-modal-content">
+            <span class="close" onclick="closeModal(); return false;" role="button" tabindex="0">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- 3D Preview - Visible, scrollable, perfect -->
+    <div id="preview3D" class="preview-3d" style="display:none;">
+        <div class="preview-3d-inner">
+            <div class="preview-header">
+                <h3 id="preview3DTitle" class="preview-title-gradient">3D Preview</h3>
+                <button type="button" class="preview-close-btn" onclick="close3DPreview(); return false;">Close</button>
+            </div>
+            <div id="previewCanvas" class="preview-canvas-large"></div>
+            <div class="preview-controls">
+                <button type="button" onclick="rotate3D('left'); return false;">↻ Rotate Left</button>
+                <button type="button" onclick="rotate3D('right'); return false;">↺ Rotate Right</button>
+                <button type="button" onclick="zoom3D('in'); return false;">+ Zoom In</button>
+                <button type="button" onclick="zoom3D('out'); return false;">− Zoom Out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer - Like reference -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h2 class="footer-logo-gradient">FurniSwift.</h2>
+                <p class="footer-tagline">Future-Proof Comfort.</p>
+                <p class="footer-tagline">Coimbatore Crafted.</p>
+                <p class="footer-motto">INDIA'S INTERIOR REVOLUTION</p>
+            </div>
+            <div class="footer-hub">
+                <h3>DESIGNER HUB</h3>
+                <p>12/B Designer Plaza, Avinashi Road,<br>Coimbatore, TN 641018</p>
+            </div>
+            <div class="footer-social">
+                <h3>SOCIAL REACH</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-btn" aria-label="Instagram">📷</a>
+                    <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
